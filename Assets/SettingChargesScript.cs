@@ -7,11 +7,15 @@ using UnityEngine;
 using Rnd = UnityEngine.Random;
 using KModkit;
 
-public class TemplateScript : MonoBehaviour
+public class SettingChargesScript : MonoBehaviour
 {
     public KMBombModule Module;
     public KMBombInfo BombInfo;
     public KMAudio Audio;
+    public KMSelectable[] Chargeage;
+    public KMSelectable Button;
+    public KMSelectable Resetage;
+    public TextMesh Number;
 
     private int _moduleId;
     private static int _moduleIdCounter = 1;
