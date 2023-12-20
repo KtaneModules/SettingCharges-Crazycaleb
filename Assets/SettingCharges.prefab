@@ -21399,8 +21399,8 @@ MonoBehaviour:
   m_Script: {fileID: -119419473, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ModuleType: Template
-  ModuleDisplayName: Template
+  ModuleType: settingCharges
+  ModuleDisplayName: Setting Charges
   RequiresTimerVisibility: 0
 --- !u!114 &114950891952834616
 MonoBehaviour:
