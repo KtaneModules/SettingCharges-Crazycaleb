@@ -123,7 +123,7 @@ public class SettingChargesScript : MonoBehaviour
         for (int i = 0; i < 11; i++)
         {
             int DR = TheGrid[3 + i ,9 + i] = 1;
-        }
+        
             int R = TheGrid[3 + i, 9] = 1;
             int D = TheGrid[3, 9 + i] = 1;
             int UL = TheGrid[3 - i, 9 - i] = 1;
@@ -131,6 +131,7 @@ public class SettingChargesScript : MonoBehaviour
             int L = TheGrid[3, 9 - i] = 1;
             int DL = TheGrid[3 + i, 9 - i] = 1;
             int UR = TheGrid[3 - i, 9 + i] = 1;
+        }
 
     }
 }
