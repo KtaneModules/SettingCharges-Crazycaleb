@@ -84,8 +84,8 @@ public class SettingChargesScript : MonoBehaviour
         while (lineFlags.Contains(false)) {
             for (int l = 0; l < redCount * 8; l++) { //for every single line
                 if (lineFlags[l]) { continue; } //provided it can still move
-                switch (l % 8) { //move one tile in that direction; whichever it is
-             /*up*/ case 0: lineYs[l] -= 1; break;
+                switch (l % 8) { 
+             /*up*/ case 0: lineYs[l] -= 1; break; //move one tile in that direction; whichever it is
        /*up-right*/ case 1: lineYs[l] -= 1; lineXs[l] += 1; break;
           /*right*/ case 2: lineXs[l] += 1; break;
      /*down-right*/ case 3: lineYs[l] += 1; lineXs[l] += 1; break;
