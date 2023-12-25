@@ -165,7 +165,7 @@ public class SettingChargesScript : MonoBehaviour
     void ChargePress(KMSelectable Charge)
     {
         Charge.AddInteractionPunch();
-        Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, Charge.transform);
+        Audio.PlaySoundAtTransform("DirtSound", Charge.transform);
         if (animating || _moduleSolved) { return; }
 
         int index = Array.IndexOf(Charges, Charge);
@@ -224,6 +224,17 @@ public class SettingChargesScript : MonoBehaviour
     }
 
     private IEnumerator Animate () {
+        Number.text = "";
+        Audio.PlaySoundAtTransform("CountdownSFX", transform);
+        Number.text = "3";
+        yield return new WaitForSeconds(1.0f);
+        Number.text = "2";
+        yield return new WaitForSeconds(1.0f);
+        Number.text = "1";
+        yield return new WaitForSeconds(1.0f);
+        Number.text = "0";
+        yield return new WaitForSeconds(1.0f);
+        Audio.PlaySoundAtTransform("ExplosionSFX", transform);
         int hitBlues = 0;
         int[] shockYs = new int[placedReds * 8]; //like the lines, each set of 8 corresponds to a direction
         int[] shockXs = new int[placedReds * 8];
@@ -244,7 +255,7 @@ public class SettingChargesScript : MonoBehaviour
         }
 
         while (shockFlags.Contains(false)) { //while shockwaves are present
-            yield return new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(0.25f);
             for (int t = 0; t < 96; t++) { //set what was white from previous iteration of this loop to black
                 if (TheGrid[t % 8, t / 8] > 50) {
                     TheGrid[t % 8, t / 8] -= 100;
@@ -292,6 +303,7 @@ public class SettingChargesScript : MonoBehaviour
             Debug.LogFormat("[Setting Charges #{0}] All obstacles cleared, module solved.", _moduleId);
             Module.HandlePass();
             _moduleSolved = true;
+            Audio.PlaySoundAtTransform("SolveSFX", transform);
         } else {
             yield return new WaitForSeconds(0.3f);
             for (int t = 0; t < 96; t++) {
