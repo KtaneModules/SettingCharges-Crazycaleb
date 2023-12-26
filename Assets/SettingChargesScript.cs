@@ -226,14 +226,10 @@ public class SettingChargesScript : MonoBehaviour
     private IEnumerator Animate () {
         Number.text = "";
         Audio.PlaySoundAtTransform("CountdownSFX", transform);
-        Number.text = "3";
-        yield return new WaitForSeconds(1.0f);
-        Number.text = "2";
-        yield return new WaitForSeconds(1.0f);
-        Number.text = "1";
-        yield return new WaitForSeconds(1.0f);
-        Number.text = "0";
-        yield return new WaitForSeconds(1.0f);
+        for (int d = 3; d > -1; d--) {
+            Number.text = d.ToString();
+            yield return new WaitForSeconds(1.0f);
+        }
         Audio.PlaySoundAtTransform("ExplosionSFX", transform);
         int hitBlues = 0;
         int[] shockYs = new int[placedReds * 8]; //like the lines, each set of 8 corresponds to a direction
@@ -259,6 +255,10 @@ public class SettingChargesScript : MonoBehaviour
             for (int t = 0; t < 96; t++) { //set what was white from previous iteration of this loop to black
                 if (TheGrid[t % 8, t / 8] > 50) {
                     TheGrid[t % 8, t / 8] -= 100;
+                    Caps[t].GetComponent<MeshRenderer>().material = ChargeColors[0];
+                }
+                if (TheGrid[t % 8, t / 8] == -99) { //or a red we just cleared
+                    TheGrid[t % 8, t / 8] = 0;
                     Caps[t].GetComponent<MeshRenderer>().material = ChargeColors[0];
                 }
             }
@@ -287,10 +287,19 @@ public class SettingChargesScript : MonoBehaviour
                     if (!bluesHit.Contains(shockXs[s] * 8 + shockYs[s] + 100)) { 
                         bluesHit[hitBlues] = shockXs[s] * 8 + shockYs[s] + 100; //we store the index of the blue hit so we do not over count; 100 is added because the default int in C# is 0, which would be top-left
                         hitBlues += 1;
+                        TheGrid[shockYs[s], shockXs[s]] = -99; //set this to a special value to mark this as a blue we just cleared
                     }
                     shockFlags[s] = true;
                 }
             }
+
+            /*
+            string debugLogging = "";
+            for (int r = 0; r < 8; r++) {
+                debugLogging += String.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}\t{10}\t{11}\n", TheGrid[r, 0], TheGrid[r, 1], TheGrid[r, 2], TheGrid[r, 3], TheGrid[r, 4], TheGrid[r, 5], TheGrid[r, 6], TheGrid[r, 7], TheGrid[r, 8], TheGrid[r, 9], TheGrid[r, 10], TheGrid[r, 11]);
+            }
+            Debug.LogFormat("<Setting Charges #{0}> {1}", _moduleId, debugLogging);
+            */
         }
 
         if (hitBlues == placedBlues) {
@@ -310,7 +319,8 @@ public class SettingChargesScript : MonoBehaviour
                 if (TheGrid[t % 8, t / 8] > 50) { //reset the board to the initial state by subtracting 100 when necessary
                     TheGrid[t % 8, t / 8] -= 100;
                 }
-                if (TheGrid[t % 8, t / 8] == 1) { //and setting blues back to blue
+                if (TheGrid[t % 8, t / 8] == 1 || bluesHit.Contains(100+t)) { //and setting blues back to blue
+                    TheGrid[t % 8, t / 8] = 1;
                     Caps[t].GetComponent<MeshRenderer>().material = ChargeColors[1];
                 }
             }
