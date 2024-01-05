@@ -280,7 +280,7 @@ public class SettingChargesScript : MonoBehaviour
                     continue;
                 }
                 Caps[shockXs[s] * 8 + shockYs[s]].GetComponent<MeshRenderer>().material = ChargeColors[3]; //otherwise color it white
-                if (TheGrid[shockYs[s], shockXs[s]] < 50) { //if it's already marked as shockwave no need to do so again
+                if (TheGrid[shockYs[s], shockXs[s]] < 50 && TheGrid[shockYs[s], shockXs[s]] != -99) { //if it's already marked as shockwave no need to do so again; don't count -99 bc that'll make it become 1
                     TheGrid[shockYs[s], shockXs[s]] += 100;
                 }
                 if (TheGrid[shockYs[s], shockXs[s]] == 101) { //if it's where a blue was, we can stop here and mark as done
