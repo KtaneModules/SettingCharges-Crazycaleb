@@ -147,7 +147,7 @@ public class SettingChargesScript : MonoBehaviour
 
     void ClearPress(KMSelectable Reset)
     {
-        Reset.AddInteractionPunch();
+        Reset.AddInteractionPunch(0.2f);
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, Reset.transform);
         if (animating || _moduleSolved) { return; }
 
@@ -164,7 +164,7 @@ public class SettingChargesScript : MonoBehaviour
 
     void ChargePress(KMSelectable Charge)
     {
-        Charge.AddInteractionPunch();
+        Charge.AddInteractionPunch(0.2f);
         Audio.PlaySoundAtTransform("DirtSound", Charge.transform);
         if (animating || _moduleSolved) { return; }
 
@@ -196,7 +196,7 @@ public class SettingChargesScript : MonoBehaviour
 
     void SubmitPress(KMSelectable submit)
     {
-        submit.AddInteractionPunch();
+        submit.AddInteractionPunch(0.2f);
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, submit.transform);
         if (animating || _moduleSolved) { return; }
         
