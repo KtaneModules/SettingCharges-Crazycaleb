@@ -301,13 +301,11 @@ public class SettingChargesScript : MonoBehaviour
             Debug.LogFormat("<Setting Charges #{0}> {1}", _moduleId, debugLogging);
             */
         }
+        yield return new WaitForSeconds(0.25f);
 
         if (hitBlues == placedBlues) {
-            for (int t = 0; t < 96; t++) { //set final whites to black on solve
-                if (TheGrid[t % 8, t / 8] > 50) {
-                    TheGrid[t % 8, t / 8] -= 100;
-                    Caps[t].GetComponent<MeshRenderer>().material = ChargeColors[0];
-                }
+            for (int t = 0; t < 96; t++) { //set grid to black on solve
+                Caps[t].GetComponent<MeshRenderer>().material = ChargeColors[0];
             }
             Debug.LogFormat("[Setting Charges #{0}] All obstacles cleared, module solved.", _moduleId);
             Module.HandlePass();
