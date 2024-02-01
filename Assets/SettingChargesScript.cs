@@ -332,4 +332,85 @@ public class SettingChargesScript : MonoBehaviour
         animating = false;
     }
 
+    //twitch plays
+    #pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"!{0} press <A1-L8> [Presses the LED at the specified coordinate, chain with spaces] | !{0} detonate/submit [Presses the detonate button] | !{0} reset [Presses the reset button]";
+    #pragma warning restore 414
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        if (Regex.IsMatch(command, @"^\s*reset\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            if (animating)
+            {
+                yield return "sendtochaterror The reset button cannot be pressed while the charges are exploding!";
+                yield break;
+            }
+            yield return null;
+            Reset.OnInteract();
+            yield break;
+        }
+        if (Regex.IsMatch(command, @"^\s*(detonate|submit)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            if (animating)
+            {
+                yield return "sendtochaterror The detonate button cannot be pressed while the charges are exploding!";
+                yield break;
+            }
+            yield return null;
+            Submit.OnInteract();
+            yield break;
+        }
+        string[] parameters = command.Split(' ');
+        if (Regex.IsMatch(parameters[0], @"^\s*press\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            if (parameters.Length == 1)
+                yield return "sendtochaterror Please specify which LED(s) to press!";
+            else
+            {
+                for (int i = 1; i < parameters.Length; i++)
+                {
+                    if (parameters[i].Length != 2 || !parameters[i].ToUpper()[0].EqualsAny('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L') || !parameters[i][1].EqualsAny('1', '2', '3', '4', '5', '6', '7', '8'))
+                    {
+                        yield return "sendtochaterror!f The specified coordinate '" + parameters[i] + "' is invalid!";
+                        yield break;
+                    }
+                }
+                if (animating)
+                {
+                    yield return "sendtochaterror The LEDs cannot be pressed while the charges are exploding!";
+                    yield break;
+                }
+                yield return null;
+                for (int i = 1; i < parameters.Length; i++)
+                {
+                    Charges["ABCDEFGHIJKL".IndexOf(parameters[i].ToUpper()[0]) * 8 + "12345678".IndexOf(parameters[i][1])].OnInteract();
+                    yield return new WaitForSeconds(.1f);
+                }
+            }
+        }
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        if (animating)
+        {
+            _moduleSolved = true;
+            Module.HandlePass();
+            StopAllCoroutines();
+            yield break;
+        }
+        if (placedReds > 0)
+        {
+            Reset.OnInteract();
+            yield return new WaitForSeconds(.1f);
+        }
+        for (int i = 0; i < solution.Length; i++)
+        {
+            Charges[solution[i]].OnInteract();
+            yield return new WaitForSeconds(.1f);
+        }
+        Submit.OnInteract();
+        while (!_moduleSolved) yield return true;
+    }
 }
