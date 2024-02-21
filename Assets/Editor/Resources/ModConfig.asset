@@ -17,6 +17,6 @@ MonoBehaviour:
   description: "Clear the grid of all obstacles\r indicated by blue LEDs through the
     use of explosive charges.\n\nThe 3rd place winner of Round 0 for the KWSNE Rebooted!\n\nManual
     by EnigmaEmperor\n\nDeveloped by Crazycaleb and Blananas2"
-  version: 1.4
+  version: 1.5
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 7c973dac84806ca4d820d0d8e9429a97, type: 3}
